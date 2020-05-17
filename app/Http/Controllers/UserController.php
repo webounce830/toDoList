@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -42,5 +43,22 @@ class UserController extends Controller
 //        User::where('id', 1)->delete();
 
         return view('home');
+    }
+
+    public function uploadAvatar(Request $request) {
+        if ($request->hasFile('image')) {
+            $filename = $request->image->getClientOriginalName();
+            if (auth()->user()->avatar) {
+                Storage::delete('/public/images/'.auth()->user()->avatar);
+            }
+            $request->image->storeAs('images', $filename, 'public');
+            auth()->user()->update(['avatar' => $filename]);
+
+//            $request->session()->flash('message', 'Image Uploaded.');
+            return redirect()->back()->with('message', 'Image Uploaded.'); // success message
+        }
+        //        $request->image->store('images', 'public');
+//        $request->session()->flash('error', 'Image not Uploaded.');
+        return redirect()->back()->with('error', 'Image not Uploaded.'); // error message
     }
 }
