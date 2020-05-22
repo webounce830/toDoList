@@ -12,7 +12,7 @@ class TodoController extends Controller
 {
     public function index() {
         $todos = Todo::all();
-        return view('todos.index')->with(['todos' => $todos]);
+        return view('todos.index', compact('todos'));
     }
 
     public function create() {
@@ -40,7 +40,14 @@ class TodoController extends Controller
         return redirect()->back()->with('message', 'Todo Created Successfully');
     }
 
-    public function edit() {
-        return view('todos.edit');
+    public function edit(Todo $todo) {
+//        $todo = Todo::find($id);
+        return view('todos.edit', compact('todo'));
+    }
+
+    public function update(TodoCreateRequest $request, Todo $todo) {
+        // update todo
+        $todo->update(['title' => $request->title]);
+        return redirect(route('todo.index'))->with('message', 'update!');
     }
 }

@@ -2,9 +2,9 @@
     <!-- An unexamined life is not worth living. - Socrates -->
     @if ($errors->any())
         <div class="alert alert-danger">
-            <ul>
+            <ul class="list-group">
                 @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
+                    <li class="list-group-item">{{ $error }}</li>
                 @endforeach
             </ul>
         </div>
